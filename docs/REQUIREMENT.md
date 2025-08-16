@@ -2,7 +2,7 @@
 
 ## Functional Requirement
 
-- [ ] Process the string input to get the result that can tell us that the string input is valid or not?
+- [x] Process the string input to get the result that can tell us that the string input is valid or not?
 
 ### State
 
@@ -13,5 +13,5 @@
 ### State Machine
 
 - [x] Assign which state is the start state, which is the finish state.
-- [ ] Have more than one finish states in the state machine.
+- [x] Have more than one finish states in the state machine.
 - [x] It can process the input to find that the code is valid or not.
