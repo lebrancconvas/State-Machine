@@ -46,14 +46,15 @@ export class Machine<T> {
     let currentState: State<T> | null = this.startState;
 
     for(let i = 0; i < inputCodes.length; i++) {
-      if(currentState === null) {
-        return false;
-      }
       const code = inputCodes[i] || "";
       currentState = currentState?.move(code) || null;
     }
 
-    return this.finishStates.find((state) => Object.is(state, currentState)) !== undefined;
+    if(currentState === null) {
+      return false;
+    }
+
+    return this.finishStates.includes(currentState);
   }
 
   report(input: string | string[]): string {
