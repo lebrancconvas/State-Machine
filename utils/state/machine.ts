@@ -27,8 +27,15 @@ export class Machine {
 
   process(inputString: string): boolean {
     const inputCodes = inputString.split('');
-    
+    const firstCode = inputCodes[0] || "";
+    let newState = this.startState?.move(firstCode);
 
-    return false;
+    for(let i = 1; i < inputCodes.length; i++) {
+      const code = inputCodes[i] || "";
+      newState = newState?.move(code);
+    }
+
+    return newState === this.finishState;
   }
+
 };
