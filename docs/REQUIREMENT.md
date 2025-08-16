@@ -13,4 +13,5 @@
 ### State Machine
 
 - [x] Assign which state is the start state, which is the finish state.
+- [ ] Have more than one finish states in the state machine.
 - [x] It can process the input to find that the code is valid or not.
