@@ -1,11 +1,11 @@
-interface StateLink {
-  state: State;
+interface StateLink<T> {
+  state: State<T>;
   code: string;
 };
 
-export class State {
+export class State<T> {
   private _value: number;
-  private _to: StateLink[];
+  private _to: StateLink<T>[];
 
   constructor(value: number) {
     this._value = value;
@@ -16,11 +16,11 @@ export class State {
     return this._value;
   }
 
-  get to(): StateLink[] {
+  get to(): StateLink<T>[] {
     return this._to;
   }
 
-  link(terminalState: State, code: string) {
+  link(terminalState: State<T>, code: string) {
     const stateLink = {
       state: terminalState,
       code
@@ -28,8 +28,8 @@ export class State {
     this._to.push(stateLink);
   }
 
-  move(code: string): State | null {
-    const terminalState = this._to.find((state: StateLink) => state.code === code);
+  move(code: string): State<T> | null {
+    const terminalState = this._to.find((state: StateLink<T>) => state.code === code);
     if(!terminalState) {
       return null;
     }
