@@ -24,15 +24,16 @@ export class Machine {
 
   process(inputString: string): boolean {
     const inputCodes = inputString.split('');
-    let newState: State | null = this.states[0] || null;
+    let currentState: State | null = this.states[0] || null;
 
     for(let i = 0; i < inputCodes.length; i++) {
-      const code = inputCodes[i] || "";
-      newState = newState?.move(code) || null;
-      if(newState === null) {
+      if(currentState === null) {
         return false;
       }
+      const code = inputCodes[i] || "";
+      currentState = currentState?.move(code) || null;
     }
-    return Object.is(newState, this.finishState);
+
+    return Object.is(currentState, this.finishState);
   }
 };
