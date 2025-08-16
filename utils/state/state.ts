@@ -28,10 +28,10 @@ export class State {
     this._to.push(stateLink);
   }
 
-  move(code: string): State {
+  move(code: string): State | null {
     const terminalState = this._to.find((state: StateLink) => state.code === code);
     if(!terminalState) {
-      throw new Error(`[ERROR] Cannot move because didn't find the terminal state to move.`);
+      return null;
     }
     return terminalState.state;
   }
