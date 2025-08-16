@@ -2,17 +2,14 @@ import { State } from "./state";
 
 export class Machine {
   states: State[];
-  startState: State | null;
   finishState: State | null;
 
   constructor(...state: State[]) {
     this.states = [...state];
 
     if(this.states.length > 0) {
-      this.startState = this.states[0] as State;
       this.finishState = this.states[this.states.length - 1] as State;
     } else {
-      this.startState = null;
       this.finishState = null;
     }
   }
@@ -27,15 +24,15 @@ export class Machine {
 
   process(inputString: string): boolean {
     const inputCodes = inputString.split('');
-    const firstCode = inputCodes[0] || "";
-    let newState = this.startState?.move(firstCode);
+    let newState: State | null = this.states[0] || null;
 
-    for(let i = 1; i < inputCodes.length; i++) {
+    for(let i = 0; i < inputCodes.length; i++) {
       const code = inputCodes[i] || "";
-      newState = newState?.move(code);
+      newState = newState?.move(code) || null;
+      if(newState === null) {
+        return false;
+      }
     }
-
-    return newState === this.finishState;
+    return Object.is(newState, this.finishState);
   }
-
 };
