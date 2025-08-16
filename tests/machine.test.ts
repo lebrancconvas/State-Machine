@@ -1,5 +1,6 @@
 import { describe, it, expect } from "bun:test";
 import { Machine, State } from "../utils/state";
+import { useTransition } from "react";
 
 
 describe("State Machine Test.", () => {
@@ -18,11 +19,26 @@ describe("State Machine Test.", () => {
   auto.link(s2, s2, "b");
 
   it("The Start State is s0", () => {
-    expect(auto.states[0]).toBe(s0);
+    expect(auto.startState).toBe(s0);
+  });
+
+  it("Change the start state to be s1 instead of s0.", () => {
+    const mockAuto = new Machine(s0, s1, s2);
+    mockAuto.assignStartState(s1);
+    expect(mockAuto.startState).toBe(s1);
+    expect(mockAuto.startState).not.toBe(s0);
   });
 
   it("The Finish State is s2", () => {
+    expect(auto.finishStates).toBeArray();
     expect(auto.finishStates.includes(s2)).toBe(true);
+  });
+
+
+  it("The Finish State is s1 too, because I add it.", () => {
+    auto.assignFinishState(s1);
+    expect(auto.finishStates).toBeArray();
+    expect(auto.finishStates.includes(s1)).toBe(true);
   });
 
   it("The Amount of State in the State Machine is 3", () => {
