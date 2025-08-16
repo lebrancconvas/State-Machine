@@ -38,7 +38,7 @@ describe("State Machine Test.", () => {
 
   it("\'cad\' is not the valid string in this state machine.", () => {
     const testString = "cad";
-    expect(auto.process("cad")).toBe(false);
+    expect(auto.process(testString)).toBe(false);
     expect(auto.report(testString)).toBe(`The Input String: ${testString}\nResult -> NOT VALID! (In this State Machine.)`);
   });
 });
