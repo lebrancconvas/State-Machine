@@ -1,20 +1,29 @@
 import { State } from "./state";
 
-export class Machine {
-  states: State[];
-  finishState: State | null;
+export class Machine<T> {
+  states: State<T>[];
+  startState: State<T> | null;
+  finishStates: State<T>[];
 
-  constructor(...state: State[]) {
+  constructor(...state: State<T>[]) {
     this.states = [...state];
-
-    if(this.states.length > 0) {
-      this.finishState = this.states[this.states.length - 1] as State;
-    } else {
-      this.finishState = null;
-    }
+    this.startState = this.states[0] || null;
+    this.finishStates = [];
   }
 
-  link(source: State, terminal: State, code: string) {
+  lenState(): number {
+    return this.states.length;
+  }
+
+  assignStartState(newStartState: State<T>) {
+    this.startState = newStartState;
+  }
+
+  assignFinishState(newFinishState: State<T>) {
+    this.finishStates.push(newFinishState);
+  }
+
+  link(source: State<T>, terminal: State<T>, code: string) {
     if(this.states.includes(source) && this.states.includes(terminal)) {
       source.link(terminal, code);
     } else {
@@ -22,9 +31,19 @@ export class Machine {
     }
   }
 
-  process(inputString: string): boolean {
-    const inputCodes = inputString.split('');
-    let currentState: State | null = this.states[0] || null;
+  process(input: string | string[]): boolean {
+    if(this.startState === null) {
+      throw new Error(`[ERROR] Cannot find the start state in the machine to process.`);
+    }
+
+    let inputCodes: string[] = [];
+    if(typeof input === "string") {
+      inputCodes = input.split("");
+    } else {
+      inputCodes = input;
+    }
+
+    let currentState: State<T> | null = this.startState;
 
     for(let i = 0; i < inputCodes.length; i++) {
       if(currentState === null) {
@@ -34,6 +53,16 @@ export class Machine {
       currentState = currentState?.move(code) || null;
     }
 
-    return Object.is(currentState, this.finishState);
+    return this.finishStates.find((state) => Object.is(state, currentState)) !== undefined;
   }
+
+  report(input: string | string[]): string {
+    const result = this.process(input);
+    if(result) {
+      return `The Input String: ${input}\nResult -> VALID! (In this State Machine.)`;
+    } else {
+      return `The Input String: ${input}\nResult -> NOT VALID! (In this State Machine.)`;
+    }
+  }
+
 };
