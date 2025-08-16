@@ -7,6 +7,7 @@ describe("State Machine Test.", () => {
   const s1 = new State(1);
   const s2 = new State(2);
   const auto = new Machine(s0, s1, s2);
+  auto.assignFinishState(s2);
 
   auto.link(s0, s0, "c");
   auto.link(s0, s1, "a");
@@ -21,15 +22,23 @@ describe("State Machine Test.", () => {
   });
 
   it("The Finish State is s2", () => {
-    expect(auto.finishState).toBe(s2);
+    expect(auto.finishStates.includes(s2)).toBe(true);
+  });
+
+  it("The Amount of State in the State Machine is 3", () => {
+    expect(auto.lenState()).toBe(3);
   });
 
   it("\'cabac\' is the valid string in this state machine.", () => {
-    expect(auto.process("cabac")).toBe(true);
+    const testString = "cabac";
+    expect(auto.process(testString)).toBe(true);
+    expect(auto.report(testString)).toBe(`The Input String: ${testString}\nResult -> VALID! (In this State Machine.)`);
   });
 
 
   it("\'cad\' is not the valid string in this state machine.", () => {
+    const testString = "cad";
     expect(auto.process("cad")).toBe(false);
+    expect(auto.report(testString)).toBe(`The Input String: ${testString}\nResult -> NOT VALID! (In this State Machine.)`);
   });
 });
