@@ -16,10 +16,16 @@ export class Machine<T> {
   }
 
   assignStartState(newStartState: State<T>) {
+    if(!this.states.includes(newStartState)) {
+      throw new Error(`[ERROR] Cannot assign the start state, because the state does not exist.`);
+    }
     this.startState = newStartState;
   }
 
   assignFinishState(newFinishState: State<T>) {
+    if(!this.states.includes(newFinishState)) {
+      throw new Error(`[ERROR] Cannot assign the finish state, because the state does not exist.`);
+    }
     this.finishStates.push(newFinishState);
   }
 
@@ -65,5 +71,4 @@ export class Machine<T> {
       return `The Input String: ${input}\nResult -> NOT VALID! (In this State Machine.)`;
     }
   }
-
 };
